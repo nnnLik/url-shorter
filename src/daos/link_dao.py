@@ -99,27 +99,32 @@ class LinkDAO:
         if self._session.in_transaction():
             await self._session.commit()
 
-    async def get_app_statistics(self) -> dict[str, int]:
-        total_links_result = await self._session.execute(
+    async def get_total_links_count(self) -> int:
+        result = await self._session.execute(
             select(func.count(Link.id))
         )
-        total_links = total_links_result.scalar_one()
+        return result.scalar_one()
 
-        total_clicks_result = await self._session.execute(
+    async def get_total_clicks_count(self) -> int:
+        result = await self._session.execute(
             select(func.sum(LinkStats.click_count))
         )
-        total_clicks = total_clicks_result.scalar_one() or 0
+        return result.scalar_one() or 0
 
-        active_links_result = await self._session.execute(
+    async def get_active_links_count(self) -> int:
+        result = await self._session.execute(
             select(func.count(Link.id))
             .where(
                 (Link.expires_at.is_(None)) | (Link.expires_at > datetime.now())
             )
         )
-        active_links = active_links_result.scalar_one()
+        return result.scalar_one()
 
-        return {
-            "total_links": total_links,
-            "total_clicks": total_clicks,
-            "active_links": active_links,
-        }
+    async def get_top_links_by_clicks(self, limit: int = 5) -> list[tuple[Link, LinkStats]]:
+        result = await self._session.execute(
+            select(Link, LinkStats)
+            .join(LinkStats, Link.id == LinkStats.link_id)
+            .order_by(LinkStats.click_count.desc())
+            .limit(limit)
+        )
+        return result.all()

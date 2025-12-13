@@ -1,7 +1,7 @@
 from .click_event_dto import ClickEventDTO
 from .create_link_dto import CreateLinkRequestDTO, CreateLinkResponseDTO
 from .link_dto import LinkDTO
-from .link_stats_dto import AppStatsResponseDTO, LinkStatsResponseDTO
+from .link_stats_dto import AppStatsResponseDTO, LinkStatsResponseDTO, TopLinkDTO
 
 __all__ = (
     "AppStatsResponseDTO",
@@ -10,4 +10,5 @@ __all__ = (
     "CreateLinkResponseDTO",
     "LinkDTO",
     "LinkStatsResponseDTO",
+    "TopLinkDTO",
 )
