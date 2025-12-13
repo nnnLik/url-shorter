@@ -13,3 +13,13 @@ class CreateLinkResponseDTO(msgspec.Struct):
     short_url: str
     created_at: datetime
     expires_at: datetime | None = None
+
+
+class BatchCreateLinkRequestDTO(msgspec.Struct):
+    original_url: str
+    expires_at: datetime | None = None
+    count: int
+
+
+class BatchCreateLinkResponseDTO(msgspec.Struct):
+    links: list[CreateLinkResponseDTO]
