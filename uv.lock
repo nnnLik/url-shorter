@@ -886,7 +886,7 @@ dev = [
 ]
 prod = [
     { name = "alembic", specifier = "==1.17.2" },
-    { name = "asyncpg", specifier = ">=0.31.0" },
+    { name = "asyncpg", specifier = "==0.31.0" },
     { name = "fastapi", specifier = "==0.124.4" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "msgspec", specifier = "==0.20.0" },

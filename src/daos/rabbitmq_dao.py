@@ -37,7 +37,7 @@ class RabbitMQDAO:
             message,
             routing_key=core.constants.DURABLE_CLICK_EVENTS_QUEUE_NAME,
         )
-        logger.debug(f"Click event published to {core.constants.DURABLE_CLICK_EVENTS_QUEUE_NAME} for {short_code}")
+        logger.debug(f'Click event published to {core.constants.DURABLE_CLICK_EVENTS_QUEUE_NAME} for {short_code}')
 
     async def consume_click_events(
         self,
@@ -64,15 +64,15 @@ class RabbitMQDAO:
                             if consumed_count >= batch_size:
                                 break
                         except msgspec.DecodeError as e:
-                            logger.error(f"Invalid click event message format: {e}")
+                            logger.error(f'Invalid click event message format: {e}')
                             continue
                         except AMQPError as e:
-                            logger.error(f"Error processing click event message: {e}")
+                            logger.error(f'Error processing click event message: {e}')
                             continue
         except TimeoutError:
-            logger.debug("No messages in queue (timeout)")
+            logger.debug('No messages in queue (timeout)')
         except Exception as e:
-            logger.error(f"Error consuming click events: {e}")
+            logger.error(f'Error consuming click events: {e}')
             raise
 
         return events

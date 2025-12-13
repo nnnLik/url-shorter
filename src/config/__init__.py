@@ -5,6 +5,6 @@ settings = Settings.build()
 
 
 __all__ = (
-    "init_logging",
-    "settings",
+    'init_logging',
+    'settings',
 )

@@ -9,4 +9,4 @@ class Base(AsyncAttrs, DeclarativeBase):
 
     @declared_attr.directive
     def __tablename__(cls) -> str:
-        return f"{to_snake_case(cls.__name__)}"
+        return f'{to_snake_case(cls.__name__)}'

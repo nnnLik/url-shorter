@@ -31,9 +31,9 @@ class RedirectService:
         now = datetime.now(tz=UTC)
 
         # 1. Проверяем Redis кеш
-        cached_url = await self._redis_dao._client.get(f"cache:link:{short_code}")
+        cached_url = await self._redis_dao._client.get(f'cache:link:{short_code}')
         if cached_url:
-            logger.debug(f"Cache hit for {short_code}")
+            logger.debug(f'Cache hit for {short_code}')
             # Отправляем задачу постобработки даже для кеша (для статистики)
             await exec_task_by_name(
                 task_name=core.constants.PROCESS_CLICK__TASK_NAME,
@@ -48,12 +48,12 @@ class RedirectService:
         # 2. Проверяем БД
         link_dto = await self._link_dao.get_by_code(short_code)
         if link_dto is None:
-            logger.debug(f"Link not found: {short_code}")
+            logger.debug(f'Link not found: {short_code}')
             return None
 
         # 3. Проверяем срок действия
         if link_dto.expires_at and link_dto.expires_at < now:
-            logger.info(f"Link expired: {short_code}")
+            logger.info(f'Link expired: {short_code}')
             return None
 
         # 4. Сразу возвращаем URL (не ждем кеширования)

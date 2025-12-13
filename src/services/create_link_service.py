@@ -21,7 +21,7 @@ class CreateLinkService:
     _code_generator: CodeGeneratorService
     _session: AsyncSession
 
-    SHORT_URL_TEMPLATE: str = f"{settings.app.BASE_URL}/{{code}}"
+    SHORT_URL_TEMPLATE: str = f'{settings.app.BASE_URL}/{{code}}'
 
     class CreateLinkServiceError(Exception):
         pass
@@ -47,15 +47,15 @@ class CreateLinkService:
     def _validate_url(self, url: str) -> None:
         result = urlparse(url)
         if not all([result.scheme, result.netloc]):
-            raise self.InvalidURLFormatError("Invalid URL format")
-        if result.scheme not in ["http", "https"]:
-            raise self.InvalidURLFormatError("URL must use http or https protocol")
+            raise self.InvalidURLFormatError('Invalid URL format')
+        if result.scheme not in ['http', 'https']:
+            raise self.InvalidURLFormatError('URL must use http or https protocol')
 
     def _validate_custom_code(self, code: str) -> None:
         if not (6 <= len(code) <= 20):
-            raise self.InvalidCustomCodeError("Custom code must be 6-20 characters")
+            raise self.InvalidCustomCodeError('Custom code must be 6-20 characters')
         if not code.isalnum():
-            raise self.InvalidCustomCodeError("Custom code must contain only alphanumeric characters")
+            raise self.InvalidCustomCodeError('Custom code must contain only alphanumeric characters')
 
     async def _get_code_from_pool(self) -> str:
         code = await self._redis_dao.pop_code()
@@ -67,7 +67,7 @@ class CreateLinkService:
         await exec_task_by_name(core.constants.REFILL_CODE_POOL__TASK_NAME)
 
         # Пул пуст - генерируем синхронно
-        logger.warning("Pool is empty, generating code synchronously")
+        logger.warning('Pool is empty, generating code synchronously')
         code = self._code_generator.execute(1)[0]
 
         # Проверяем коллизию
@@ -92,12 +92,12 @@ class CreateLinkService:
 
         # Кешируем в Redis (TTL 24h)
         await self._redis_dao._client.setex(
-            f"cache:link:{short_code}",
+            f'cache:link:{short_code}',
             core.constants.CACHE_LINK_TTL_SEC,
             original_url,
         )
 
-        logger.info(f"Link created: {short_code} -> {original_url}")
+        logger.info(f'Link created: {short_code} -> {original_url}')
 
         return CreateLinkResponseDTO(
             short_code=link_dto.short_code,

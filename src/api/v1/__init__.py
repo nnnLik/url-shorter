@@ -5,7 +5,7 @@ from .link import router as link_router
 from .stats import router as stats_router
 
 router = APIRouter(
-    prefix="/v1",
+    prefix='/v1',
 )
 
 router.include_router(health_router)

@@ -11,7 +11,7 @@ broker = AioPikaBroker(
     url=settings.taskiq.BROKER_URL,
 )
 
-taskiq_fastapi.init(broker, "main:app")
+taskiq_fastapi.init(broker, 'main:app')
 scheduler = TaskiqScheduler(
     broker=broker,
     sources=[LabelScheduleSource(broker)],
@@ -22,7 +22,7 @@ scheduler = TaskiqScheduler(
 async def on_worker_startup(state: TaskiqState) -> None:
     init_logging()
     await rabbitmq_client.initialize()
-    logger.info("Worker startup complete, got state: %s", state)
+    logger.info('Worker startup complete, got state: %s', state)
 
 
 # Импортируем задачи для регистрации

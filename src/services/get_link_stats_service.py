@@ -20,7 +20,7 @@ class GetLinkStatsService:
     async def execute(self, short_code: str) -> LinkStatsResponseDTO:
         link = await self._link_dao.get_by_code_with_stats(short_code)
         if link is None or link.stats is None:
-            raise ValueError("Link not found")
+            raise ValueError('Link not found')
 
         return LinkStatsResponseDTO(
             short_code=link.short_code,

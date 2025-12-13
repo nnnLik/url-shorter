@@ -17,12 +17,12 @@ class CodeGeneratorService:
         hash_bytes = hashlib.sha256(random_bytes).digest()
 
         # Конвертируем в Base62
-        num: int = int.from_bytes(hash_bytes, byteorder="big")
+        num: int = int.from_bytes(hash_bytes, byteorder='big')
         code: list[str] = []
         for _ in range(length):
             code.append(core.constants.BASE62_CHARS[num % 62])
             num //= 62
-        return "".join(reversed(code))
+        return ''.join(reversed(code))
 
     def _generate_codes_batch(self, count: int) -> list[str]:
         codes = set[str]()

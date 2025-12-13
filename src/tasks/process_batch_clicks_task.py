@@ -10,7 +10,7 @@ from services.batch_click_processor_service import BatchClickProcessorService
 
 
 @broker.task(
-    schedule=[{"cron": f"*/{core.constants.BATCH_CLICK_PROCESSING_INTERVAL_MIN} * * * *"}],
+    schedule=[{'cron': f'*/{core.constants.BATCH_CLICK_PROCESSING_INTERVAL_MIN} * * * *'}],
     name=core.constants.PROCESS_BATCH_CLICKS__TASK_NAME,
 )
 async def process_batch_clicks_task(
@@ -21,4 +21,3 @@ async def process_batch_clicks_task(
 ) -> None:
     service = BatchClickProcessorService.build(session)
     await service.execute()
-

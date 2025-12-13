@@ -8,12 +8,12 @@ from services import GetAppStatsService, GetLinkStatsService
 from utils.fastapi_utils import MsgSpecJSONResponse
 
 router = APIRouter(
-    prefix="/links",
-    tags=["stats"],
+    prefix='/links',
+    tags=['stats'],
 )
 
 
-@router.get("/stats/overview")
+@router.get('/stats/overview')
 async def get_app_stats(
     _: Request,
     session: Annotated[
@@ -26,7 +26,7 @@ async def get_app_stats(
     return MsgSpecJSONResponse(content=stats)
 
 
-@router.get("/{short_code}/stats")
+@router.get('/{short_code}/stats')
 async def get_link_stats(
     _: Request,
     short_code: str,

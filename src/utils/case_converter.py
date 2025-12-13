@@ -8,6 +8,6 @@ def to_snake_case(input_str: str) -> str:
             if prev_char.isupper() and flag:
                 pass
             else:
-                chars.append("_")
+                chars.append('_')
         chars.append(char.lower())
-    return "".join(chars)
+    return ''.join(chars)

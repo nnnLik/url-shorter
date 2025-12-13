@@ -15,7 +15,7 @@ class LinkDTO(msgspec.Struct):
     expires_at: datetime | None = None
 
     @classmethod
-    def from_model(cls, model: "Link") -> Self:
+    def from_model(cls, model: 'Link') -> Self:
         return cls(
             id=model.id,
             short_code=model.short_code,

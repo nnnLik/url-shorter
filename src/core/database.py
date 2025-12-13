@@ -18,7 +18,7 @@ class DatabaseSession:
     _session_factory: async_sessionmaker[AsyncSession] = field(init=False)
 
     def __post_init__(self) -> None:
-        db_url = str(settings.database.URL).replace("postgresql://", "postgresql+asyncpg://", 1)
+        db_url = str(settings.database.URL).replace('postgresql://', 'postgresql+asyncpg://', 1)
         self._engine: AsyncEngine = create_async_engine(
             url=db_url,
             echo=settings.database.ECHO,
@@ -35,7 +35,7 @@ class DatabaseSession:
 
     async def dispose(self) -> None:
         await self._engine.dispose()
-        logger.info("Database engine disposed")
+        logger.info('Database engine disposed')
 
     async def session_getter(self) -> AsyncGenerator[AsyncSession]:
         async with self._session_factory() as session:

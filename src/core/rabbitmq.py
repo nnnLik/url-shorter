@@ -17,11 +17,11 @@ class RabbitMQClient:
     async def initialize(self) -> None:
         if self._connection is None or self._connection.is_closed:
             self._connection = await aio_pika.connect_robust(settings.taskiq.BROKER_URL)
-            logger.info("Connected to RabbitMQ")
+            logger.info('Connected to RabbitMQ')
 
         if self._channel is None or self._channel.is_closed:
             self._channel = await self._connection.channel()
-            logger.info("RabbitMQ channel created")
+            logger.info('RabbitMQ channel created')
 
         if self._queue is None:
             self._queue = await self._channel.declare_queue(
@@ -35,21 +35,21 @@ class RabbitMQClient:
             await self._channel.close()
         if self._connection and not self._connection.is_closed:
             await self._connection.close()
-        logger.info("RabbitMQ connection closed")
+        logger.info('RabbitMQ connection closed')
 
     def get_connection(self) -> AbstractConnection:
         if self._connection is None:
-            raise RuntimeError("RabbitMQ not initialized. Call initialize() first.")
+            raise RuntimeError('RabbitMQ not initialized. Call initialize() first.')
         return self._connection
 
     def get_channel(self) -> AbstractChannel:
         if self._channel is None:
-            raise RuntimeError("RabbitMQ not initialized. Call initialize() first.")
+            raise RuntimeError('RabbitMQ not initialized. Call initialize() first.')
         return self._channel
 
     def get_queue(self) -> AbstractQueue:
         if self._queue is None:
-            raise RuntimeError("RabbitMQ not initialized. Call initialize() first.")
+            raise RuntimeError('RabbitMQ not initialized. Call initialize() first.')
         return self._queue
 
 

@@ -28,7 +28,7 @@ class BatchCreateLinkService:
 
     def _validate_count(self, count: int) -> None:
         if count < 1 or count > 50:
-            raise self.InvalidCountError("Count must be between 1 and 50")
+            raise self.InvalidCountError('Count must be between 1 and 50')
 
     async def execute(
         self,
@@ -46,6 +46,6 @@ class BatchCreateLinkService:
             )
             links.append(link)
 
-        logger.info(f"Batch created {count} links for {original_url}")
+        logger.info(f'Batch created {count} links for {original_url}')
 
         return BatchCreateLinkResponseDTO(links=links)

@@ -31,10 +31,10 @@ class BatchClickProcessorService:
         )
 
         if not events:
-            logger.debug("No click events to process")
+            logger.debug('No click events to process')
             return
 
-        logger.info(f"Processing batch of {len(events)} click events")
+        logger.info(f'Processing batch of {len(events)} click events')
 
         # Группируем клики по short_code
         clicks_by_code: dict[str, list[ClickEventDTO]] = defaultdict[str, list[ClickEventDTO]](list)
@@ -48,7 +48,7 @@ class BatchClickProcessorService:
             if link_dto:
                 link_ids_by_code[short_code] = link_dto.id
             else:
-                logger.warning(f"Link not found for code: {short_code}")
+                logger.warning(f'Link not found for code: {short_code}')
 
         # Группируем клики по link_id и собираем статистику
         click_counts: Mapping[int, int] = defaultdict[int, int](int)
@@ -71,7 +71,7 @@ class BatchClickProcessorService:
                         if latest_timestamp is None or click_time > latest_timestamp:
                             latest_timestamp = click_time
                     except ValueError as e:
-                        logger.warning(f"Invalid timestamp format in click event: {click.timestamp}, error: {e}")
+                        logger.warning(f'Invalid timestamp format in click event: {click.timestamp}, error: {e}')
 
             if latest_timestamp:
                 # Обновляем только если новый клик позже существующего
@@ -85,10 +85,7 @@ class BatchClickProcessorService:
                 click_counts=click_counts,
                 last_click_times=last_click_times,
             )
-            logger.info(
-                f"Updated stats for {len(click_counts)} links: "
-                f"total clicks={sum(click_counts.values())}"
-            )
+            logger.info(f'Updated stats for {len(click_counts)} links: total clicks={sum(click_counts.values())}')
 
     async def execute(self) -> None:
         await self._consume_click_events()

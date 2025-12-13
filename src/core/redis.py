@@ -21,12 +21,12 @@ class RedisClient:
             decode_responses=settings.redis.DECODE_RESPONSES,
         )
         self._client = Redis(connection_pool=self._pool)
-        logger.info("Redis client initialized")
+        logger.info('Redis client initialized')
 
     async def close(self) -> None:
         await self._client.aclose()
         await self._pool.aclose()
-        logger.info("Redis client closed")
+        logger.info('Redis client closed')
 
     def get_client(self) -> Redis:
         return self._client

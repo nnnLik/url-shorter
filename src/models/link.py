@@ -17,15 +17,15 @@ class Link(Base, IntPkMixin, CreatedAtMixin):
     original_url: Mapped[str] = mapped_column(Text, nullable=False)
     expires_at: Mapped[datetime | None] = mapped_column(TIMESTAMP, nullable=True)
 
-    stats: Mapped["LinkStats"] = relationship(
-        "LinkStats",
-        back_populates="link",
+    stats: Mapped['LinkStats'] = relationship(
+        'LinkStats',
+        back_populates='link',
         uselist=False,
-        cascade="all, delete-orphan",
+        cascade='all, delete-orphan',
     )
 
 
-@event.listens_for(Link, "after_insert")
+@event.listens_for(Link, 'after_insert')
 def create_link_stats(
     _: Mapper,
     connection: Connection,

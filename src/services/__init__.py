@@ -7,11 +7,11 @@ from .get_link_stats_service import GetLinkStatsService
 from .redirect_service import RedirectService
 
 __all__ = (
-    "BatchCreateLinkService",
-    "CodeGeneratorService",
-    "CreateLinkService",
-    "GenerateBatchOfCodesService",
-    "GetAppStatsService",
-    "GetLinkStatsService",
-    "RedirectService",
+    'BatchCreateLinkService',
+    'CodeGeneratorService',
+    'CreateLinkService',
+    'GenerateBatchOfCodesService',
+    'GetAppStatsService',
+    'GetLinkStatsService',
+    'RedirectService',
 )

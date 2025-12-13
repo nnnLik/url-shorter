@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class LinkStats(Base, IntPkMixin):
     link_id: Mapped[int] = mapped_column(
-        ForeignKey("link.id", ondelete="CASCADE"),
+        ForeignKey('link.id', ondelete='CASCADE'),
         unique=True,
         index=True,
         nullable=False,
@@ -21,4 +21,4 @@ class LinkStats(Base, IntPkMixin):
     click_count: Mapped[int] = mapped_column(BigInteger, default=0, nullable=False)
     last_click_at: Mapped[datetime | None] = mapped_column(TIMESTAMP, nullable=True)
 
-    link: Mapped["Link"] = relationship("Link", back_populates="stats")
+    link: Mapped['Link'] = relationship('Link', back_populates='stats')

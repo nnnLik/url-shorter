@@ -30,7 +30,7 @@ class GenerateBatchOfCodesService:
             count = max(0, core.constants.CODE_POOL_MAX_SIZE - current_size)
 
         if count <= 0:
-            logger.info("Pool is full, no generation needed")
+            logger.info('Pool is full, no generation needed')
             return
 
         # Генерируем запасом на коллизии (10% запас)
@@ -59,9 +59,9 @@ class GenerateBatchOfCodesService:
         pool_size_after = await self._redis_dao.get_pool_size()
 
         logger.info(
-            f"Generated batch: requested={count}, "
-            f"generated={len(codes_list)}, "
-            f"collisions={collisions}, "
-            f"added={added}, "
-            f"pool_size={pool_size_after}"
+            f'Generated batch: requested={count}, '
+            f'generated={len(codes_list)}, '
+            f'collisions={collisions}, '
+            f'added={added}, '
+            f'pool_size={pool_size_after}'
         )

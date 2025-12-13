@@ -12,7 +12,7 @@ from dtos.link_stats_dto import AppStatsResponseDTO, TopLinkDTO
 class GetAppStatsService:
     _link_dao: LinkDAO
 
-    SHORT_URL_TEMPLATE: str = f"{settings.app.BASE_URL}/{{code}}"
+    SHORT_URL_TEMPLATE: str = f'{settings.app.BASE_URL}/{{code}}'
 
     @classmethod
     def build(cls, session: AsyncSession) -> Self:

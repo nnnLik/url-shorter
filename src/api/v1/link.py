@@ -17,12 +17,12 @@ from services import BatchCreateLinkService, CreateLinkService, RedirectService
 from utils.fastapi_utils import MsgSpecJSONResponse, decode_msgspec
 
 router = APIRouter(
-    prefix="/links",
-    tags=["links"],
+    prefix='/links',
+    tags=['links'],
 )
 
 
-@router.post("", status_code=status.HTTP_201_CREATED)
+@router.post('', status_code=status.HTTP_201_CREATED)
 async def create_link(
     request: Request,
     session: Annotated[AsyncSession, Depends(db_session.session_getter)],
@@ -40,7 +40,7 @@ async def create_link(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e)) from e
 
 
-@router.post("/batch", status_code=status.HTTP_201_CREATED)
+@router.post('/batch', status_code=status.HTTP_201_CREATED)
 async def batch_create_links(
     request: Request,
     session: Annotated[AsyncSession, Depends(db_session.session_getter)],
@@ -59,7 +59,7 @@ async def batch_create_links(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e)) from e
 
 
-@router.get("/{short_code}")
+@router.get('/{short_code}')
 async def redirect_to_original(
     short_code: str,
     request: Request,
@@ -73,17 +73,17 @@ async def redirect_to_original(
     original_url = await service.execute(
         short_code=short_code,
         ip_address=(
-            request.headers.get("X-Real-IP")
-            or request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+            request.headers.get('X-Real-IP')
+            or request.headers.get('X-Forwarded-For', '').split(',')[0].strip()
             or (request.client.host if request.client else None)
         ),
-        user_agent=request.headers.get("user-agent"),
+        user_agent=request.headers.get('user-agent'),
     )
 
     if original_url is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Link not found or expired",
+            detail='Link not found or expired',
         )
 
     return RedirectResponse(

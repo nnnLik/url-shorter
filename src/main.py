@@ -6,10 +6,11 @@ from utils.app_utils import get_and_setup_app
 app: FastAPI = get_and_setup_app()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import uvicorn
+
     uvicorn.run(
-        "main:app",
+        'main:app',
         host=settings.app.HOST,
         port=settings.app.PORT,
         reload=settings.app.RELOAD,

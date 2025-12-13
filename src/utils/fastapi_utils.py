@@ -5,7 +5,7 @@ from fastapi import Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.routing import JSONResponse
 
-T = TypeVar("T", bound=msgspec.Struct)
+T = TypeVar('T', bound=msgspec.Struct)
 
 
 class MsgSpecJSONResponse(JSONResponse):
@@ -18,4 +18,4 @@ async def decode_msgspec[T: msgspec.Struct](request: Request, model: type[T]) ->
     try:
         return msgspec.json.decode(body, type=model)
     except msgspec.DecodeError as e:
-        raise RequestValidationError(errors=[{"type": "value_error", "msg": str(e)}]) from e
+        raise RequestValidationError(errors=[{'type': 'value_error', 'msg': str(e)}]) from e

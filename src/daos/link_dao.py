@@ -24,17 +24,13 @@ class LinkDAO:
 
         for i in range(0, len(codes), MAX_BATCH_SIZE):
             batch = codes[i : i + MAX_BATCH_SIZE]
-            result = await self._session.execute(
-                select(Link.short_code).where(Link.short_code.in_(batch))
-            )
+            result = await self._session.execute(select(Link.short_code).where(Link.short_code.in_(batch)))
             existing_codes.update(result.scalars().all())
 
         return existing_codes
 
     async def get_by_code(self, code: str) -> LinkDTO | None:
-        result = await self._session.execute(
-            select(Link).where(Link.short_code == code)
-        )
+        result = await self._session.execute(select(Link).where(Link.short_code == code))
         link = result.scalar_one_or_none()
         if link is None:
             return None
@@ -43,9 +39,7 @@ class LinkDAO:
 
     async def get_by_code_with_stats(self, code: str) -> Link | None:
         result = await self._session.execute(
-            select(Link)
-            .options(joinedload(Link.stats))
-            .where(Link.short_code == code)
+            select(Link).options(joinedload(Link.stats)).where(Link.short_code == code)
         )
         return result.scalar_one_or_none()
 
@@ -66,9 +60,7 @@ class LinkDAO:
         return LinkDTO.from_model(link)
 
     async def code_exists(self, code: str) -> bool:
-        result = await self._session.execute(
-            select(Link.short_code).where(Link.short_code == code)
-        )
+        result = await self._session.execute(select(Link.short_code).where(Link.short_code == code))
         return result.scalar_one_or_none() is not None
 
     async def batch_update_link_stats(
@@ -100,23 +92,16 @@ class LinkDAO:
             await self._session.commit()
 
     async def get_total_links_count(self) -> int:
-        result = await self._session.execute(
-            select(func.count(Link.id))
-        )
+        result = await self._session.execute(select(func.count(Link.id)))
         return result.scalar_one()
 
     async def get_total_clicks_count(self) -> int:
-        result = await self._session.execute(
-            select(func.sum(LinkStats.click_count))
-        )
+        result = await self._session.execute(select(func.sum(LinkStats.click_count)))
         return result.scalar_one() or 0
 
     async def get_active_links_count(self) -> int:
         result = await self._session.execute(
-            select(func.count(Link.id))
-            .where(
-                (Link.expires_at.is_(None)) | (Link.expires_at > datetime.now(tz=UTC))
-            )
+            select(func.count(Link.id)).where((Link.expires_at.is_(None)) | (Link.expires_at > datetime.now(tz=UTC)))
         )
         return result.scalar_one()
 

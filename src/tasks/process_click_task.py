@@ -24,11 +24,11 @@ async def process_click_task(
 
     # 1. Кеширование в Redis (TTL 24h)
     await redis_dao._client.setex(
-        f"cache:link:{short_code}",
+        f'cache:link:{short_code}',
         core.constants.CACHE_LINK_TTL_SEC,
         original_url,
     )
-    logger.debug(f"Cached link {short_code} in Redis")
+    logger.debug(f'Cached link {short_code} in Redis')
 
     # 2. Отправка клика в RabbitMQ очередь для батч-обработки
     try:
@@ -39,4 +39,4 @@ async def process_click_task(
             user_agent=user_agent,
         )
     except AMQPError as e:
-        logger.error(f"Failed to publish click event to RabbitMQ for {short_code}: {e}")
+        logger.error(f'Failed to publish click event to RabbitMQ for {short_code}: {e}')
