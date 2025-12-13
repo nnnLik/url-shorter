@@ -15,11 +15,17 @@ docker run --rm \
   --continue-after=30 \
   --include-path '/opt/pysetup' \
   --include-path '/opt/app' \
+  --include-path '/usr/local/lib/python3.13' \
+  --include-path '/usr/local/lib/python3.13/encodings' \
+  --include-path '/usr/local/lib/python3.13/lib-dynload' \
   --include-exe 'python' \
+  --include-exe 'python3' \
+  --include-exe 'python3.13' \
   --include-exe 'uv' \
   --include-exe 'curl' \
   --include-exe 'vim' \
   --include-exe 'htop' \
+  --include-shell \
   url-shorter:dev
 
 echo "🏷️  Tagging slim image..."
