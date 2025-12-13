@@ -24,7 +24,7 @@ jobs:
           version: 'latest'
 
       - name: Install dependencies
-        run: uv sync --all-group
+        run: uv sync --all-groups
 
       - name: Verify ruff version and config
         run: |
