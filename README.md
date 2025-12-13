@@ -1,51 +1,51 @@
-# URL Shorter
+# URL Shortener
 
-Сервис для сокращения ссылок.
+A link shortening service.
 
-## Что это
+## What It Is
 
-Приколы:
-- Редирект работает быстро (кеш в Redis, асинхронная обработка)
-- Статистика по кликам (сколько раз перешли, когда последний раз)
-- Топ-5 самых популярных ссылок
-- Коды генерируются заранее, так что создание ссылки — дело микросекунды
+Key features:
+- Redirects are fast (Redis cache, async processing)
+- Click statistics (total clicks, last click time)
+- Top 5 most popular links
+- Codes are pre-generated, so creating a link takes microseconds
 
-## Как запустить
+## How to Run
 
 ```bash
 make start
 ```
 
-Сервис поднимется на `http://localhost:9898`. Документация API будет на `/docs` (стандартный FastAPI Swagger).
+The service will start at `http://localhost:9898`. API documentation will be available at `/docs` (standard FastAPI Swagger).
 
-## Что внутри
+## What's Inside
 
-- **FastAPI** — основной фреймворк
-- **PostgreSQL** — храним ссылки и статистику
-- **Redis** — кеш для быстрых редиректов + пул предгенерированных кодов
-- **RabbitMQ** — очередь для обработки кликов (чтобы не блокировать редирект)
-- **TaskIQ** — фоновые задачи (пополнение пула кодов, батч-обработка кликов)
+- **FastAPI** — main framework
+- **PostgreSQL** — stores links and statistics
+- **Redis** — cache for fast redirects + pool of pre-generated codes
+- **RabbitMQ** — queue for click processing (so redirects aren’t blocked)
+- **TaskIQ** — background tasks (refilling code pool, batch processing clicks)
 
-Все детали в `/docs` после запуска.
+All details are in `/docs` after launch.
 
-## Как это работает
+## How It Works
 
-1. Создаешь ссылку -> получаешь 8-символьный код
-2. Кто-то кликает -> редирект мгновенный (из кеша), а клик записывается в очередь
-3. Фоновая задача собирает клики батчами и обновляет статистику
-4. Коды генерируются заранее в пуле, так что не ждешь генерации при создании
+1. You create a link → get an 8-character code
+2. Someone clicks → instant redirect (from cache), click is logged to queue
+3. Background task collects clicks in batches and updates statistics
+4. Codes are pre-generated in a pool, so you don’t wait during creation
 
-## Полезные команды
+## Useful Commands
 
-- `make up` — запустить
-- `make down` — остановить
-- `make logs` — посмотреть логи
-- `make migrate` — применить миграции
-- `make shell` — зайти в IPython shell
+- `make up` — start
+- `make down` — stop
+- `make logs` — view logs
+- `make migrate` — run migrations
+- `make shell` — open IPython shell
 
-## Примечания
+## Notes
 
-- Пул кодов пополняется автоматически (когда остается меньше 10% от максимума)
-- Клики обрабатываются батчами каждую минуту
-- Кеш ссылок живет 24 часа
-- Если пул кодов пуст — сгенерируется синхронно (но это редкость)
+- Code pool refills automatically (when less than 10% remains)
+- Clicks are processed in batches every minute
+- Link cache lives for 24 hours
+- If the code pool is empty — codes are generated synchronously (but this is rare)
