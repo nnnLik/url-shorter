@@ -49,3 +49,14 @@ All details are in `/docs` after launch.
 - Clicks are processed in batches every minute
 - Link cache lives for 24 hours
 - If the code pool is empty — codes are generated synchronously (but this is rare)
+
+## TODO
+
+- [ ] Delete expired URLs (cleanup task for expired links)
+- [ ] Store clicks in ClickHouse with metadata (IP, user-agent, timestamp, etc.)
+- [ ] Investigate RPS limits and optimize performance
+- [ ] Optimize Docker image size
+- [ ] QR code generation for links
+- [ ] CI/CD pipeline setup
+- [ ]Add tests (unit + integration)
+- [ ] User authentication, rate limits per user, personal links
