@@ -27,6 +27,9 @@ prod = [
 target-version = "py313"
 line-length = 120
 indent-width = 4
+exclude = [
+    "**/migrations/**",
+]
 
 [tool.ruff.lint]
 select = [
@@ -50,6 +53,7 @@ select = [
 ignore = [
     "E501",  # line too long (handled by formatter)
     "S110",  # try-except-pass (sometimes needed)
+    "S104",  # binding to all interfaces (0.0.0.0) - OK for Docker containers
 ]
 fixable = ["I", "E", "F", "W", "UP"]
 unfixable = []
@@ -58,5 +62,5 @@ unfixable = []
 known-first-party = ["src"]
 
 [tool.ruff.format]
-quote-style = "double"
+quote-style = "single"
 indent-style = "space"
