@@ -10,8 +10,9 @@ import core.constants
 from config import settings
 from daos import LinkDAO, RedisDAO
 from dtos import CreateLinkResponseDTO
-from services import CodeGeneratorService
 from utils.taskiq_utils import exec_task_by_name
+
+from .code_generator_service import CodeGeneratorService
 
 
 @dataclass

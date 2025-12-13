@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import db_session
@@ -15,7 +15,6 @@ router = APIRouter(
 
 @router.get('/stats/overview')
 async def get_app_stats(
-    _: Request,
     session: Annotated[
         AsyncSession,
         Depends(db_session.session_getter),
@@ -28,7 +27,6 @@ async def get_app_stats(
 
 @router.get('/{short_code}/stats')
 async def get_link_stats(
-    _: Request,
     short_code: str,
     session: Annotated[
         AsyncSession,

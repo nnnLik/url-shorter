@@ -15,6 +15,10 @@ class RedirectService:
     _redis_dao: RedisDAO
     _link_dao: LinkDAO
 
+
+    class LinkNotFoundError(Exception):
+        pass
+
     @classmethod
     def build(cls, session: AsyncSession) -> Self:
         return cls(
@@ -27,7 +31,7 @@ class RedirectService:
         short_code: str,
         ip_address: str | None,
         user_agent: str | None,
-    ) -> str | None:
+    ) -> str:
         now = datetime.now(tz=UTC)
 
         # 1. Проверяем Redis кеш
@@ -49,12 +53,12 @@ class RedirectService:
         link_dto = await self._link_dao.get_by_code(short_code)
         if link_dto is None:
             logger.debug(f'Link not found: {short_code}')
-            return None
+            raise self.LinkNotFoundError('Link not found')
 
         # 3. Проверяем срок действия
         if link_dto.expires_at and link_dto.expires_at < now:
             logger.info(f'Link expired: {short_code}')
-            return None
+            raise self.LinkNotFoundError('Link expired')
 
         # 4. Сразу возвращаем URL (не ждем кеширования)
         # Кеширование и запись клика выполнятся асинхронно в задаче постобработки

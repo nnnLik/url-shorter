@@ -1,13 +1,6 @@
 from typing import Annotated
 
-from fastapi import (
-    APIRouter,
-    Depends,
-    HTTPException,
-    Request,
-    Response,
-    status,
-)
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -70,23 +63,23 @@ async def redirect_to_original(
 ) -> RedirectResponse:
     service = RedirectService.build(session)
 
-    original_url = await service.execute(
-        short_code=short_code,
-        ip_address=(
-            request.headers.get('X-Real-IP')
-            or request.headers.get('X-Forwarded-For', '').split(',')[0].strip()
-            or (request.client.host if request.client else None)
-        ),
-        user_agent=request.headers.get('user-agent'),
-    )
+    try:
+        original_url = await service.execute(
+            short_code=short_code,
+            ip_address=(
+                request.headers.get('X-Real-IP')
+                or request.headers.get('X-Forwarded-For', '').split(',')[0].strip()
+                or (request.client.host if request.client else None)
+            ),
+            user_agent=request.headers.get('user-agent'),
+        )
 
-    if original_url is None:
+        return RedirectResponse(
+            url=original_url,
+            status_code=status.HTTP_302_FOUND,
+        )
+    except RedirectService.LinkNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='Link not found or expired',
-        )
-
-    return RedirectResponse(
-        url=original_url,
-        status_code=status.HTTP_302_FOUND,
-    )
+        ) from e
