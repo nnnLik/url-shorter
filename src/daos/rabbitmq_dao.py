@@ -1,4 +1,3 @@
-import asyncio
 from dataclasses import dataclass
 
 import aio_pika
@@ -69,7 +68,7 @@ class RabbitMQDAO:
                         except Exception as e:
                             logger.error(f"Error processing click event message: {e}")
                             continue
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.debug("No messages in queue (timeout)")
         except Exception as e:
             logger.error(f"Error consuming click events: {e}")

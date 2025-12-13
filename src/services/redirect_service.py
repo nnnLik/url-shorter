@@ -1,6 +1,6 @@
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Self
-from dataclasses import dataclass
 
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import core.constants
 from daos import LinkDAO, RedisDAO
 from utils.taskiq_utils import exec_task_by_name
+
 
 @dataclass
 class RedirectService:

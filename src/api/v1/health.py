@@ -3,9 +3,8 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
 from core.database import db_session
-from core.redis import redis_client
 from core.rabbitmq import rabbitmq_client
-
+from core.redis import redis_client
 
 router = APIRouter(
     prefix="/health",

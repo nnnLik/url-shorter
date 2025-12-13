@@ -1,21 +1,22 @@
-from typing import Any, Generator
+from collections.abc import Generator
 from contextlib import asynccontextmanager
+from typing import Any
 
 from fastapi import FastAPI
 
-from config import settings
 from api import router as api_router
+from config import settings
 from config.logging import init_logging
-from utils.fastapi_utils import MsgSpecJSONResponse
 from core.database import db_session
 from core.rabbitmq import rabbitmq_client
 from core.redis import redis_client
 from core.taskiq_broker import broker
+from utils.fastapi_utils import MsgSpecJSONResponse
 
 
 def get_app() -> FastAPI:
     @asynccontextmanager
-    async def lifespan(_: FastAPI) -> Generator[None, Any, None]:
+    async def lifespan(_: FastAPI) -> Generator[None, Any]:
         if not broker.is_worker_process and not broker.is_scheduler_process:
             await broker.startup()
             await rabbitmq_client.initialize()

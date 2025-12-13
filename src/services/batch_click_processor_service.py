@@ -1,7 +1,8 @@
 from collections import defaultdict
-from datetime import datetime
-from typing import Mapping, Self
+from collections.abc import Mapping
 from dataclasses import dataclass
+from datetime import datetime
+from typing import Self
 
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession

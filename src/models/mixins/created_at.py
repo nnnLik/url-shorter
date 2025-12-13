@@ -1,11 +1,11 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
 
 
 def get_current_dt() -> datetime:
-    dt = datetime.now(tz=timezone.utc)
+    dt = datetime.now(tz=UTC)
     return dt.replace(microsecond=0, tzinfo=None)
 
 

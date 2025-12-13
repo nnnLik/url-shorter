@@ -2,8 +2,8 @@ from typing import Any, TypeVar
 
 import msgspec
 from fastapi import Request
-from fastapi.routing import JSONResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.routing import JSONResponse
 
 T = TypeVar("T", bound=msgspec.Struct)
 

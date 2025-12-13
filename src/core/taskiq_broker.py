@@ -4,7 +4,7 @@ from taskiq import TaskiqEvents, TaskiqScheduler, TaskiqState
 from taskiq.schedule_sources import LabelScheduleSource
 from taskiq_aio_pika import AioPikaBroker
 
-from config import settings, init_logging
+from config import init_logging, settings
 from core.rabbitmq import rabbitmq_client
 
 broker = AioPikaBroker(

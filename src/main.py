@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from config import settings
 from utils.app_utils import get_and_setup_app
 
-
 app: FastAPI = get_and_setup_app()
 
 

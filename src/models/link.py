@@ -1,9 +1,9 @@
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import String, Text, TIMESTAMP, event
-from sqlalchemy.orm import Mapped, Mapper, mapped_column, relationship
+from sqlalchemy import TIMESTAMP, String, Text, event
 from sqlalchemy.engine import Connection
+from sqlalchemy.orm import Mapped, Mapper, mapped_column, relationship
 
 from .base import Base
 from .mixins import CreatedAtMixin, IntPkMixin

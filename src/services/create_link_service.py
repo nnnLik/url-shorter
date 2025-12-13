@@ -1,6 +1,6 @@
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Self
-from dataclasses import dataclass
 from urllib.parse import urlparse
 
 from loguru import logger

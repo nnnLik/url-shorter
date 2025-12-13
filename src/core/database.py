@@ -1,13 +1,13 @@
+from collections.abc import AsyncGenerator
 from dataclasses import dataclass, field
-from typing import AsyncGenerator
 
 from loguru import logger
-from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import (
-    create_async_engine,
     AsyncEngine,
     async_sessionmaker,
+    create_async_engine,
 )
+from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from config import settings
 
@@ -37,7 +37,7 @@ class DatabaseSession:
         await self._engine.dispose()
         logger.info("Database engine disposed")
 
-    async def session_getter(self) -> AsyncGenerator[AsyncSession, None]:
+    async def session_getter(self) -> AsyncGenerator[AsyncSession]:
         async with self._session_factory() as session:
             try:
                 yield session

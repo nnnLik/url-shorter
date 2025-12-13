@@ -1,7 +1,7 @@
 from typing import Annotated
 
-from loguru import logger
 from fastapi import Depends
+from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import core.constants

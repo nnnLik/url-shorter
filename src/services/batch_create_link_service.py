@@ -1,12 +1,13 @@
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Self
-from dataclasses import dataclass
 
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from dtos import BatchCreateLinkResponseDTO
-from services import CreateLinkService
+
+from .create_link_service import CreateLinkService
 
 
 @dataclass

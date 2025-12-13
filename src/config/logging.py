@@ -1,5 +1,5 @@
-import sys
 import logging
+import sys
 from pprint import pformat
 
 from loguru import logger

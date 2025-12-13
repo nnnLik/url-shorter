@@ -1,8 +1,7 @@
-from dataclasses import dataclass
-from typing import Self
-
 import hashlib
 import secrets
+from dataclasses import dataclass
+from typing import Self
 
 import core.constants
 

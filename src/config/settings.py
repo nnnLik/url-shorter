@@ -1,11 +1,11 @@
-import os
-from typing import Self
-from enum import StrEnum
-from dataclasses import dataclass
 import logging
+import os
+from dataclasses import dataclass
+from enum import StrEnum
+from typing import Self
 
-from pydantic_settings import BaseSettings
 from pydantic import Field, PostgresDsn
+from pydantic_settings import BaseSettings
 
 
 class Env(StrEnum):

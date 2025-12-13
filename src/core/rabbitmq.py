@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 import aio_pika
-from aio_pika.abc import AbstractConnection, AbstractChannel, AbstractQueue
+from aio_pika.abc import AbstractChannel, AbstractConnection, AbstractQueue
 from loguru import logger
 
 import core.constants

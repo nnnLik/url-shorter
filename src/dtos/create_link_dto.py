@@ -17,8 +17,8 @@ class CreateLinkResponseDTO(msgspec.Struct):
 
 class BatchCreateLinkRequestDTO(msgspec.Struct):
     original_url: str
-    expires_at: datetime | None = None
     count: int
+    expires_at: datetime | None = None
 
 
 class BatchCreateLinkResponseDTO(msgspec.Struct):

@@ -1,5 +1,5 @@
-from .settings import Settings
 from .logging import init_logging
+from .settings import Settings
 
 settings = Settings.build()
 
