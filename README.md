@@ -56,7 +56,7 @@ This project uses [DockerSlim](https://github.com/slimtoolkit/slim) to minimize 
 
 **Image sizes:**
 - Original image: ~667 MB
-- Minified image: ~391 MB (1.7x smaller)
+- Minified image: ~352 MB (1.9x smaller)
 
 **Automatic minification:**
 
