@@ -15,7 +15,6 @@ class RedirectService:
     _redis_dao: RedisDAO
     _link_dao: LinkDAO
 
-
     class LinkNotFoundError(Exception):
         pass
 
