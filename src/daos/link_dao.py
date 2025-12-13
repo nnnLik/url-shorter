@@ -4,9 +4,9 @@ from typing import Mapping
 
 from sqlalchemy import select, update, func
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from dtos.link_dto import LinkDTO
-from dtos.link_stats_dto import AppStatsResponseDTO, LinkStatsResponseDTO
 from models.link import Link
 from models.link_stats import LinkStats
 
@@ -40,6 +40,14 @@ class LinkDAO:
             return None
 
         return LinkDTO.from_model(link)
+
+    async def get_by_code_with_stats(self, code: str) -> Link | None:
+        result = await self._session.execute(
+            select(Link)
+            .options(joinedload(Link.stats))
+            .where(Link.short_code == code)
+        )
+        return result.scalar_one_or_none()
 
     async def create_link(
         self,
@@ -91,41 +99,17 @@ class LinkDAO:
         if self._session.in_transaction():
             await self._session.commit()
 
-    async def get_link_stats_by_code(self, code: str) -> LinkStatsResponseDTO | None:
-        """Получает статистику по short_code."""
-        result = await self._session.execute(
-            select(Link, LinkStats)
-            .join(LinkStats, Link.id == LinkStats.link_id)
-            .where(Link.short_code == code)
-        )
-        row = result.first()
-        if row is None:
-            return None
-
-        link, stats = row
-        return LinkStatsResponseDTO(
-            short_code=link.short_code,
-            original_url=link.original_url,
-            click_count=stats.click_count,
-            last_click_at=stats.last_click_at,
-        )
-
-    async def get_app_stats(self) -> AppStatsResponseDTO:
-        """Получает общую статистику приложения."""
-        # Общее количество ссылок
+    async def get_app_statistics(self) -> dict[str, int]:
         total_links_result = await self._session.execute(
             select(func.count(Link.id))
         )
         total_links = total_links_result.scalar_one()
 
-        # Суммарное количество кликов
         total_clicks_result = await self._session.execute(
             select(func.sum(LinkStats.click_count))
         )
         total_clicks = total_clicks_result.scalar_one() or 0
 
-        # Активные ссылки (не истекшие)
-        from datetime import datetime
         active_links_result = await self._session.execute(
             select(func.count(Link.id))
             .where(
@@ -134,8 +118,8 @@ class LinkDAO:
         )
         active_links = active_links_result.scalar_one()
 
-        return AppStatsResponseDTO(
-            total_links=total_links,
-            total_clicks=total_clicks,
-            active_links=active_links,
-        )
+        return {
+            "total_links": total_links,
+            "total_clicks": total_clicks,
+            "active_links": active_links,
+        }
