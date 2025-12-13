@@ -25,3 +25,19 @@ migrate:
 
 migration:
 	$(DC) exec url-shorter-backend bash -c "cd /opt/app/src && alembic revision --autogenerate -m '$(msg)'"
+
+ruff-check:
+	ruff check src
+
+ruff-format:
+	ruff format src
+
+ruff-fix:
+	ruff check --fix src
+
+ty-check:
+	ty check src
+
+lint: ruff-check ty-check
+
+format: ruff-format
