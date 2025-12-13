@@ -77,8 +77,8 @@ This project uses [DockerSlim](https://github.com/slimtoolkit/slim) to minimize 
    make auto-slim     # smart minification (only if needed)
    ```
 
-4. **In CI/CD:**
-   Automatically runs on push when `Dockerfile`, `pyproject.toml` or code changes (see `.github/workflows/docker-slim.yml`)
+**Note:** DockerSlim works only locally. In CI/CD, dev images are not minified.
+
 
 **How it works:**
 - `auto-slim` checks hash of `Dockerfile` and `pyproject.toml` — only minifies if they changed
@@ -93,5 +93,5 @@ This project uses [DockerSlim](https://github.com/slimtoolkit/slim) to minimize 
 - [x] Optimize Docker image size (DockerSlim)
 - [ ] QR code generation for links
 - [x] CI/CD pipeline setup (GitHub Actions)
-- [ ]Add tests (unit + integration)
+- [ ] Add tests (unit + integration)
 - [ ] User authentication, rate limits per user, personal links
