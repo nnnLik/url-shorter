@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 import aio_pika
 import msgspec
+from aiormq import AMQPError
 from loguru import logger
 
 import core.constants
@@ -65,7 +66,7 @@ class RabbitMQDAO:
                         except msgspec.DecodeError as e:
                             logger.error(f"Invalid click event message format: {e}")
                             continue
-                        except Exception as e:
+                        except AMQPError as e:
                             logger.error(f"Error processing click event message: {e}")
                             continue
         except TimeoutError:

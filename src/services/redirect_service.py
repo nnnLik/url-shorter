@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Self
 
 from loguru import logger
@@ -28,7 +28,7 @@ class RedirectService:
         ip_address: str | None,
         user_agent: str | None,
     ) -> str | None:
-        now = datetime.now()
+        now = datetime.now(tz=UTC)
 
         # 1. Проверяем Redis кеш
         cached_url = await self._redis_dao._client.get(f"cache:link:{short_code}")

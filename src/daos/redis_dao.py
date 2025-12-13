@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import ClassVar
 
 from redis.asyncio import Redis
 
@@ -7,7 +8,7 @@ from core.redis import redis_client
 
 @dataclass
 class RedisDAO:
-    _client: Redis = redis_client.get_client()
+    _client: ClassVar[Redis] = redis_client.get_client()
 
     async def get_pool_size(self) -> int:
         return await self._client.scard("pool:codes")

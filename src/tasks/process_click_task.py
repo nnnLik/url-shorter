@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from aiormq import AMQPError
 from loguru import logger
 
 import core.constants
@@ -37,5 +38,5 @@ async def process_click_task(
             ip_address=ip_address,
             user_agent=user_agent,
         )
-    except Exception as e:
+    except AMQPError as e:
         logger.error(f"Failed to publish click event to RabbitMQ for {short_code}: {e}")

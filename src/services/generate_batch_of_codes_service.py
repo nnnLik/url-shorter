@@ -33,7 +33,7 @@ class GenerateBatchOfCodesService:
             logger.info("Pool is full, no generation needed")
             return
 
-        # Генерируем с запасом на коллизии (10% запас)
+        # Генерируем запасом на коллизии (10% запас)
         codes_to_generate = count + (count // 10)
         all_codes = set[str]()
 

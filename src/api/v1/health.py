@@ -28,25 +28,16 @@ async def readiness_check() -> JSONResponse:
         "rabbitmq": False,
     }
 
-    try:
-        async with db_session._session_factory() as session:
-            await session.execute(text("SELECT 1"))
-            checks["database"] = True
-    except Exception:
-        pass
+    async with db_session._session_factory() as session:
+        await session.execute(text("SELECT 1"))
+        checks["database"] = True
 
-    try:
-        await redis_client._client.ping()
-        checks["redis"] = True
-    except Exception:
-        pass
+    await redis_client._client.ping()
+    checks["redis"] = True
 
-    try:
-        connection = rabbitmq_client.get_connection()
-        if connection and not connection.is_closed:
-            checks["rabbitmq"] = True
-    except (RuntimeError, Exception):
-        pass
+    connection = rabbitmq_client.get_connection()
+    if connection and not connection.is_closed:
+        checks["rabbitmq"] = True
 
     all_ready = all(checks.values())
 

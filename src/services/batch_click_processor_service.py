@@ -70,7 +70,7 @@ class BatchClickProcessorService:
                         click_time = datetime.fromisoformat(click.timestamp)
                         if latest_timestamp is None or click_time > latest_timestamp:
                             latest_timestamp = click_time
-                    except Exception as e:
+                    except ValueError as e:
                         logger.warning(f"Invalid timestamp format in click event: {click.timestamp}, error: {e}")
 
             if latest_timestamp:

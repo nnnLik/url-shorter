@@ -26,4 +26,4 @@ async def on_worker_startup(state: TaskiqState) -> None:
 
 
 # Импортируем задачи для регистрации
-from tasks import *  # noqa: F401 E402 F403
+from tasks import *  # noqa: E402 F403

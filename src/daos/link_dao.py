@@ -1,6 +1,6 @@
 from collections.abc import Mapping
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -115,7 +115,7 @@ class LinkDAO:
         result = await self._session.execute(
             select(func.count(Link.id))
             .where(
-                (Link.expires_at.is_(None)) | (Link.expires_at > datetime.now())
+                (Link.expires_at.is_(None)) | (Link.expires_at > datetime.now(tz=UTC))
             )
         )
         return result.scalar_one()
