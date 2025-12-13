@@ -50,13 +50,48 @@ All details are in `/docs` after launch.
 - Link cache lives for 24 hours
 - If the code pool is empty — codes are generated synchronously (but this is rare)
 
+## Docker Image Optimization
+
+This project uses [DockerSlim](https://github.com/slimtoolkit/slim) to minimize image size.
+
+**Image sizes:**
+- Original image: ~667 MB
+- Minified image: ~352 MB (1.9x smaller)
+
+**Automatic minification:**
+
+1. **Auto on start (recommended):**
+   ```bash
+   make start-slim    # checks if minification is needed and runs it automatically
+   ```
+
+2. **Using an environment variable:**
+   ```bash
+   SLIM_BUILD=true make build    # automatically minifies during build
+   ```
+
+3. **Manually:**
+   ```bash
+   make slim-build    # minify the image
+   make slim-start    # minify and run with slim image
+   make auto-slim     # smart minification (only if needed)
+   ```
+
+4. **In CI/CD:**
+   Automatically runs on push when `Dockerfile`, `pyproject.toml` or code changes (see `.github/workflows/docker-slim.yml`)
+
+**How it works:**
+- `auto-slim` checks hash of `Dockerfile` and `pyproject.toml` — only minifies if they changed
+- `start-slim` automatically minifies and starts with slim image
+- Volumes (`./src:/opt/app`) still work for hot-reload
+
 ## TODO
 
 - [ ] Delete expired URLs (cleanup task for expired links)
 - [ ] Store clicks in ClickHouse with metadata (IP, user-agent, timestamp, etc.)
 - [ ] Investigate RPS limits and optimize performance
-- [ ] Optimize Docker image size
+- [x] Optimize Docker image size (DockerSlim)
 - [ ] QR code generation for links
-- [ ] CI/CD pipeline setup
+- [x] CI/CD pipeline setup (GitHub Actions)
 - [ ]Add tests (unit + integration)
 - [ ] User authentication, rate limits per user, personal links

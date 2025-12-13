@@ -1,4 +1,5 @@
 DC = docker compose -f compose.dev.yml
+DC_SLIM = docker compose -f compose.dev.yml -f compose.dev.slim.yml
 
 start: build up
 
@@ -9,7 +10,12 @@ down:
 	$(DC) down
 
 build:
-	$(DC) build
+	@if [ "$(SLIM_BUILD)" = "true" ]; then \
+		echo "🔨 Building and minifying with DockerSlim..."; \
+		$(MAKE) slim-build; \
+	else \
+		$(DC) build; \
+	fi
 
 logs:
 	$(DC) logs -f
@@ -69,7 +75,14 @@ slim-build:
 
 slim-start: slim-build
 	@echo "Starting with slim image..."
-	$(DC) up -d
+	$(DC_SLIM) up -d
 
 slim-script:
 	@./scripts/slim-dev.sh
+
+auto-slim:
+	@./scripts/auto-slim.sh
+
+start-slim: auto-slim
+	@echo "Starting with slim image..."
+	$(DC_SLIM) up -d

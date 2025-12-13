@@ -1,0 +1,12 @@
+services:
+  url-shorter-backend:
+    image: url-shorter.slim:dev
+    build: null
+
+  taskiq-worker:
+    image: url-shorter.slim:dev
+    build: null
+
+  taskiq-scheduler:
+    image: url-shorter.slim:dev
+    build: null
