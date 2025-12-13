@@ -1,0 +1,132 @@
+x-app-service: &app-service
+  env_file:
+    - vars/.env
+  working_dir: /opt/app
+  volumes:
+    - ./src:/opt/app
+  networks:
+    - url-shorter-network
+  restart: unless-stopped
+
+x-rabbitmq-service-env: &rabbitmq-service-env
+  RABBITMQ_DEFAULT_USER: "guest"
+  RABBITMQ_DEFAULT_PASS: "guest"
+
+x-postgres-service-env: &postgres-service-env
+  POSTGRES_DB: url-shorter
+  POSTGRES_USER: url-shorter
+  POSTGRES_PASSWORD: url-shorter
+
+services:
+  url-shorter-nginx:
+    image: nginx:1.29.4-alpine
+    container_name: url-shorter-nginx
+    ports:
+      - "9898:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - url-shorter-network
+    depends_on:
+      url-shorter-backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+  url-shorter-backend:
+    <<: *app-service
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    container_name: url-shorter-backend
+    command: python src/main.py
+    expose:
+      - "6749"
+    volumes:
+      - .:/opt/app
+    depends_on:
+      - url-shorter-redis
+      - url-shorter-rabbitmq
+      - url-shorter-postgres
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6749/docs"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  taskiq-worker:
+    <<: *app-service
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    container_name: url-shorter-taskiq-worker
+    command: taskiq worker core.taskiq_broker:broker --workers 2 --no-configure-logging --fs-discover --tasks-pattern "**/tasks"
+    volumes:
+      - ./src:/opt/app
+    depends_on:
+      - url-shorter-redis
+      - url-shorter-rabbitmq
+      - url-shorter-postgres
+
+  taskiq-scheduler:
+    <<: *app-service
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    container_name: url-shorter-taskiq-scheduler
+    command: taskiq scheduler core.taskiq_broker:scheduler
+    volumes:
+      - ./src:/opt/app
+    depends_on:
+      - url-shorter-redis
+      - url-shorter-rabbitmq
+      - url-shorter-postgres
+
+  url-shorter-redis:
+    image: redis:7-alpine
+    container_name: url-shorter-redis
+    volumes:
+      - ./.docker-volumes/redis-data:/data
+    networks:
+      - url-shorter-network
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  url-shorter-rabbitmq:
+    image: rabbitmq:3-management-alpine
+    hostname: rabbitmq
+    container_name: url-shorter-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      <<: *rabbitmq-service-env
+    volumes:
+      - ./.docker-volumes/rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - url-shorter-network
+    restart: unless-stopped
+
+  url-shorter-postgres:
+    image: postgres:16-alpine
+    environment:
+      <<: *postgres-service-env
+    ports:
+      - "5551:5432"
+    volumes:
+      - ./.docker-volumes/postgres-data:/var/lib/postgresql/data
+    networks:
+      - url-shorter-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+networks:
+  url-shorter-network:
+    driver: bridge

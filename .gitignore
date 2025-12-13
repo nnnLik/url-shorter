@@ -1,0 +1,7 @@
+.venv/
+.docker-volumes/
+__pycache__/
+*.pyc
+.env.prod
+.DS_Store
+docs/

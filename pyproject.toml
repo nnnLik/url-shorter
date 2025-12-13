@@ -1,0 +1,24 @@
+[project]
+name = "url-shorter"
+version = "0.1.0"
+requires-python = "==3.13.*"
+
+[dependency-groups]
+dev = [
+    "ipython>=9.8.0",
+    "pre-commit>=4.5.0",
+    "ruff>=0.14.9",
+]
+prod = [
+    "fastapi==0.124.4",
+    "uvicorn==0.38.0",
+    "loguru>=0.7.3",
+    "msgspec==0.20.0",
+    "pydantic-settings==2.12.0",
+    "taskiq==0.12.1",
+    "taskiq-aio-pika==0.5.0",
+    "taskiq-fastapi==0.4.0",
+    "redis==7.1.0",
+    "asyncpg>=0.31.0",
+    "alembic==1.17.2",
+]
