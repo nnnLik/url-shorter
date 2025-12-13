@@ -26,8 +26,13 @@ jobs:
       - name: Install dependencies
         run: uv sync --group dev
 
+      - name: Verify ruff version and config
+        run: |
+          uv run ruff --version
+          uv run ruff check --show-settings .
+
       - name: Check formatting
-        run: uv run ruff format --check src
+        run: uv run ruff format --check .
 
       - name: Check linting
-        run: uv run ruff check src
+        run: uv run ruff check .
