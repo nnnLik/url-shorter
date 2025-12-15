@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 import aio_pika
-import msgspec
+import orjson
 from aiormq import AMQPError
 from loguru import logger
 
@@ -29,7 +29,7 @@ class RabbitMQDAO:
         )
 
         message = aio_pika.Message(
-            body=msgspec.json.encode(click_event),
+            body=orjson.dumps(click_event.model_dump()),
             delivery_mode=aio_pika.DeliveryMode.PERSISTENT,
         )
 
@@ -54,16 +54,14 @@ class RabbitMQDAO:
                 async for message in queue_iter:
                     async with message.process():
                         try:
-                            click_event = msgspec.json.decode(
-                                message.body,
-                                type=ClickEventDTO,
-                            )
+                            data = orjson.loads(message.body)
+                            click_event = ClickEventDTO(**data)
                             events.append(click_event)
                             consumed_count += 1
 
                             if consumed_count >= batch_size:
                                 break
-                        except msgspec.DecodeError as e:
+                        except (orjson.JSONDecodeError, ValueError, TypeError) as e:
                             logger.error(f'Invalid click event message format: {e}')
                             continue
                         except AMQPError as e:

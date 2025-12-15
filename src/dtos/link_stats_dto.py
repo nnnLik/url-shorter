@@ -1,22 +1,22 @@
 from datetime import datetime
 
-import msgspec
+from pydantic import BaseModel
 
 
-class LinkStatsResponseDTO(msgspec.Struct):
+class LinkStatsResponseDTO(BaseModel):
     short_code: str
     original_url: str
     click_count: int
     last_click_at: datetime | None = None
 
 
-class TopLinkDTO(msgspec.Struct):
+class TopLinkDTO(BaseModel):
     original_url: str
     short_url: str
     click_count: int
 
 
-class AppStatsResponseDTO(msgspec.Struct):
+class AppStatsResponseDTO(BaseModel):
     total_links: int
     total_clicks: int
     active_links: int

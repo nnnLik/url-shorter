@@ -1,13 +1,13 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, Self
 
-import msgspec
+from pydantic import BaseModel
 
 if TYPE_CHECKING:
     from models.link import Link
 
 
-class LinkDTO(msgspec.Struct):
+class LinkDTO(BaseModel):
     id: int
     short_code: str
     original_url: str

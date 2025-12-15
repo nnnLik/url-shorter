@@ -1,5 +1,5 @@
 from fastapi import APIRouter, status
-from fastapi.responses import JSONResponse
+from fastapi.responses import ORJSONResponse
 from sqlalchemy import text
 
 from core.database import db_session
@@ -13,15 +13,15 @@ router = APIRouter(
 
 
 @router.get('')
-async def health_check() -> JSONResponse:
-    return JSONResponse(
+async def health_check() -> ORJSONResponse:
+    return ORJSONResponse(
         content={'status': 'ok'},
         status_code=status.HTTP_200_OK,
     )
 
 
 @router.get('/ready')
-async def readiness_check() -> JSONResponse:
+async def readiness_check() -> ORJSONResponse:
     checks = {
         'database': False,
         'redis': False,
@@ -41,7 +41,7 @@ async def readiness_check() -> JSONResponse:
 
     all_ready = all(checks.values())
 
-    return JSONResponse(
+    return ORJSONResponse(
         content={
             'status': 'ready' if all_ready else 'not ready',
             'checks': checks,

@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from typing import Any
 
 from fastapi import FastAPI
+from fastapi.responses import ORJSONResponse
 
 from api import router as api_router
 from config import settings
@@ -11,7 +12,6 @@ from core.database import db_session
 from core.rabbitmq import rabbitmq_client
 from core.redis import redis_client
 from core.taskiq_broker import broker
-from utils.fastapi_utils import MsgSpecJSONResponse
 
 
 def get_app() -> FastAPI:
@@ -32,7 +32,7 @@ def get_app() -> FastAPI:
         description=settings.app.DESCRIPTION,
         version=settings.app.VERSION,
         lifespan=lifespan,
-        default_response_class=MsgSpecJSONResponse,
+        default_response_class=ORJSONResponse,
     )
 
 

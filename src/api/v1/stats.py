@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import db_session
+from dtos import AppStatsResponseDTO, LinkStatsResponseDTO
 from services import GetAppStatsService, GetLinkStatsService
-from utils.fastapi_utils import MsgSpecJSONResponse
 
 router = APIRouter(
     prefix='/stats',
@@ -19,10 +19,9 @@ async def get_app_stats(
         AsyncSession,
         Depends(db_session.session_getter),
     ],
-) -> MsgSpecJSONResponse:
+) -> AppStatsResponseDTO:
     service = GetAppStatsService.build(session)
-    stats = await service.execute()
-    return MsgSpecJSONResponse(content=stats)
+    return await service.execute()
 
 
 @router.get('/{short_code}')
@@ -32,11 +31,10 @@ async def get_link_stats(
         AsyncSession,
         Depends(db_session.session_getter),
     ],
-) -> MsgSpecJSONResponse:
+) -> LinkStatsResponseDTO:
     service = GetLinkStatsService.build(session)
     try:
-        stats = await service.execute(short_code)
-        return MsgSpecJSONResponse(content=stats)
+        return await service.execute(short_code)
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

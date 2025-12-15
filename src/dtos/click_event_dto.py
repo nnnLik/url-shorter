@@ -1,7 +1,7 @@
-import msgspec
+from pydantic import BaseModel
 
 
-class ClickEventDTO(msgspec.Struct):
+class ClickEventDTO(BaseModel):
     short_code: str
     timestamp: str
     ip_address: str | None = None
