@@ -15,7 +15,7 @@ router = APIRouter(
 )
 
 
-@router.post('', status_code=status.HTTP_201_CREATED)
+@router.post('/pack', status_code=status.HTTP_201_CREATED)
 async def create_link(
     request: Request,
     session: Annotated[AsyncSession, Depends(db_session.session_getter)],
@@ -52,7 +52,7 @@ async def batch_create_links(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e)) from e
 
 
-@router.get('/{short_code}')
+@router.get('/unpack/{short_code}')
 async def redirect_to_original(
     short_code: str,
     request: Request,
