@@ -14,7 +14,6 @@ router = APIRouter(
 )
 
 
-
 @router.post('/pack', status_code=status.HTTP_201_CREATED)
 async def create_link(
     create_link_request_dto: CreateLinkRequestDTO,
